@@ -19,12 +19,22 @@ describe 'Fluent::ObjectFlattenFilter#configure' do
 
   describe 'tr' do
     context 'default' do
-      it { is_expected.to eq [] }
+      it { is_expected.to be_nil }
     end
 
     context '/ -> _' do
       let(:fluentd_conf) { {tr: ['/', '_']} }
       it { is_expected.to eq ['/', '_'] }
+    end
+
+    context 'invalid length' do
+      let(:fluentd_conf) { {tr: []} }
+
+      it do
+        expect {
+          subject
+        }.to raise_error('tr: wrong length (0 for 2)')
+      end
     end
   end
 end
