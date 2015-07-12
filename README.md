@@ -55,19 +55,19 @@ $ fluentd -c fluent.conf
 ```
 
 ```sh
-$ echo '{"foo":"bar", "bar":"zoo"})' | fluentd test.object
+$ echo '{"foo":"bar", "bar":"zoo"}' | fluent-cat test.object
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo":"bar"}
 #=> 2015-01-01 23:34:45 +0900 test.object: {"bar":"zoo"}
 
-$ echo '{"foo":["bar", "zoo"]})' | fluentd test.object
+$ echo '{"foo":["bar", "zoo"]}' | fluent-cat test.object
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo":"bar"}
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo":"zoo"}
 
-$ echo '{"foo":{"bar1":"zoo", "bar2":"baz"}})' | fluentd test.object
+$ echo '{"foo":{"bar1":"zoo", "bar2":"baz"}}' | fluent-cat test.object
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo.bar1":"zoo"}
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo.bar2":"baz"}
 
-$ echo '{"foo1":{"bar1":"zoo", "bar2":"baz"}, "foo2":{"bar":["zoo", "baz"], "zoo":"baz"}}' | fluentd test.object
+$ echo '{"foo1":{"bar1":"zoo", "bar2":"baz"}, "foo2":{"bar":["zoo", "baz"], "zoo":"baz"}}' | fluent-cat test.object
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo1.bar1":"zoo"}
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo1.bar2":"baz"}
 #=> 2015-01-01 23:34:45 +0900 test.object: {"foo2.bar":"zoo"}
