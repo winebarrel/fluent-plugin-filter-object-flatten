@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Filter Plugin to convert the hash record to records of key-value pairs.}
   spec.description   = %q{Filter Plugin to convert the hash record to records of key-value pairs.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = 'https://github.com/winebarrel/fluent-plugin-filter-object-flatten'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
