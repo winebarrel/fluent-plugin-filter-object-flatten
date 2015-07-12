@@ -21,7 +21,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fluent-plugin-filter-object-flatten
+    $ gem install object_flatten
 
 
 ```apache
