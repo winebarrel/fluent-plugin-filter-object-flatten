@@ -85,4 +85,19 @@ describe Fluent::ObjectFlattenFilter do
       ]
     end
   end
+
+  context("f oo1"=>{"b/ar1"=>"zoo", "b ar2"=>"baz"},
+          "f/oo2"=>{"b ar"=>["zoo","baz"], "z/oo"=>"baz"}) do
+    let(:fluentd_conf) { {tr: [' /', '__']} }
+
+    it do
+      is_expected.to eq [
+        ["test.default", time, {"f_oo1.b_ar1"=>"zoo"}],
+        ["test.default", time, {"f_oo1.b_ar2"=>"baz"}],
+        ["test.default", time, {"f_oo2.b_ar"=>"zoo"}],
+        ["test.default", time, {"f_oo2.b_ar"=>"baz"}],
+        ["test.default", time, {"f_oo2.z_oo"=>"baz"}]
+      ]
+    end
+  end
 end

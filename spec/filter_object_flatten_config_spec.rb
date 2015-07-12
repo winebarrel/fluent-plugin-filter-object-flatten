@@ -16,4 +16,15 @@ describe 'Fluent::ObjectFlattenFilter#configure' do
       it { is_expected.to eq '/' }
     end
   end
+
+  describe 'tr' do
+    context 'default' do
+      it { is_expected.to eq [] }
+    end
+
+    context '/ -> _' do
+      let(:fluentd_conf) { {tr: ['/', '_']} }
+      it { is_expected.to eq ['/', '_'] }
+    end
+  end
 end

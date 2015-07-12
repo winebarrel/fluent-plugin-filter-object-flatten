@@ -29,6 +29,7 @@ Or install it yourself as:
 <filter>
   type object_flatten
   #separator .
+  #tr [" /", "__"]
 </filter>
 ```
 

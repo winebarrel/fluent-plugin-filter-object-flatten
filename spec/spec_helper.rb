@@ -24,6 +24,12 @@ separator #{options[:separator]}
     EOS
   end
 
+  if options[:tr]
+    fluentd_conf << <<-EOS
+tr #{options[:tr].inspect}
+    EOS
+  end
+
   tag = options[:tag] || 'test.default'
   Fluent::Test::FilterTestDriver.new(Fluent::ObjectFlattenFilter, tag).configure(fluentd_conf)
 end
