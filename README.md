@@ -21,12 +21,13 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install object_flatten
+    $ gem install fluent-plugin-filter-object-flatten
 
+## Configuration
 
 ```apache
 <filter>
-  type fluent-plugin-filter-object-flatten
+  type object_flatten
   #separator .
 </filter>
 ```
