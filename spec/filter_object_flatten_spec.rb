@@ -1,15 +1,18 @@
-describe Fluent::ObjectFlattenFilter do
+describe Fluent::Plugin::ObjectFlattenFilter do
+  include Fluent::Test::Helpers
+
   let(:driver) { create_driver(fluentd_conf) }
   let(:fluentd_conf) { {} }
-  let(:time) { Time.parse('2015/05/24 18:30 UTC').to_i }
+  let(:time) { event_time('2015/05/24 18:30 UTC') }
   let(:obj) { described_class }
 
   before do
-    driver.emit(obj, time)
-    driver.run
+    driver.run(default_tag: 'test.default') do
+      driver.feed(time, obj)
+    end
   end
 
-  subject { driver.emits }
+  subject { driver.filtered }
 
   context({}) do
     it { is_expected.to be_empty }
@@ -18,7 +21,7 @@ describe Fluent::ObjectFlattenFilter do
   context("foo"=>"bar") do
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo"=>"bar"}]
+        [time, {"foo"=>"bar"}]
       ]
     end
   end
@@ -26,8 +29,8 @@ describe Fluent::ObjectFlattenFilter do
   context("foo"=>"bar", "bar"=>"zoo") do
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo"=>"bar"}],
-        ["test.default", time, {"bar"=>"zoo"}]
+        [time, {"foo"=>"bar"}],
+        [time, {"bar"=>"zoo"}]
       ]
     end
   end
@@ -35,8 +38,8 @@ describe Fluent::ObjectFlattenFilter do
   context("foo"=>["bar", "zoo"]) do
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo"=>"bar"}],
-        ["test.default", time, {"foo"=>"zoo"}]
+        [time, {"foo"=>"bar"}],
+        [time, {"foo"=>"zoo"}]
       ]
     end
   end
@@ -44,8 +47,8 @@ describe Fluent::ObjectFlattenFilter do
   context("foo"=>{"bar1"=>"zoo", "bar2"=>"baz"}) do
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo.bar1"=>"zoo"}],
-        ["test.default", time, {"foo.bar2"=>"baz"}]
+        [time, {"foo.bar1"=>"zoo"}],
+        [time, {"foo.bar2"=>"baz"}]
       ]
     end
   end
@@ -55,8 +58,8 @@ describe Fluent::ObjectFlattenFilter do
 
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo/bar1"=>"zoo"}],
-        ["test.default", time, {"foo/bar2"=>"baz"}]
+        [time, {"foo/bar1"=>"zoo"}],
+        [time, {"foo/bar2"=>"baz"}]
       ]
     end
   end
@@ -65,11 +68,11 @@ describe Fluent::ObjectFlattenFilter do
           "foo2"=>{"bar"=>["zoo","baz"], "zoo"=>"baz"}) do
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo1.bar1"=>"zoo"}],
-        ["test.default", time, {"foo1.bar2"=>"baz"}],
-        ["test.default", time, {"foo2.bar"=>"zoo"}],
-        ["test.default", time, {"foo2.bar"=>"baz"}],
-        ["test.default", time, {"foo2.zoo"=>"baz"}]
+        [time, {"foo1.bar1"=>"zoo"}],
+        [time, {"foo1.bar2"=>"baz"}],
+        [time, {"foo2.bar"=>"zoo"}],
+        [time, {"foo2.bar"=>"baz"}],
+        [time, {"foo2.zoo"=>"baz"}]
       ]
     end
   end
@@ -78,10 +81,10 @@ describe Fluent::ObjectFlattenFilter do
           "foo2"=>{"bar"=>{"zoo"=>["baz1","baz2"]}}) do
     it do
       is_expected.to eq [
-        ["test.default", time, {"foo1.bar.zoo1"=>"baz"}],
-        ["test.default", time, {"foo1.bar.zoo2"=>"baz"}],
-        ["test.default", time, {"foo2.bar.zoo"=>"baz1"}],
-        ["test.default", time, {"foo2.bar.zoo"=>"baz2"}]
+        [time, {"foo1.bar.zoo1"=>"baz"}],
+        [time, {"foo1.bar.zoo2"=>"baz"}],
+        [time, {"foo2.bar.zoo"=>"baz1"}],
+        [time, {"foo2.bar.zoo"=>"baz2"}]
       ]
     end
   end
@@ -92,11 +95,11 @@ describe Fluent::ObjectFlattenFilter do
 
     it do
       is_expected.to eq [
-        ["test.default", time, {"f_oo1.b_ar1"=>"zoo"}],
-        ["test.default", time, {"f_oo1.b_ar2"=>"baz"}],
-        ["test.default", time, {"f_oo2.b_ar"=>"zoo"}],
-        ["test.default", time, {"f_oo2.b_ar"=>"baz"}],
-        ["test.default", time, {"f_oo2.z_oo"=>"baz"}]
+        [time, {"f_oo1.b_ar1"=>"zoo"}],
+        [time, {"f_oo1.b_ar2"=>"baz"}],
+        [time, {"f_oo2.b_ar"=>"zoo"}],
+        [time, {"f_oo2.b_ar"=>"baz"}],
+        [time, {"f_oo2.z_oo"=>"baz"}]
       ]
     end
   end

@@ -1,4 +1,4 @@
-describe 'Fluent::ObjectFlattenFilter#configure' do
+describe 'Fluent::Plugin::ObjectFlattenFilter#configure' do
   subject do |example|
     param = example.full_description.split(/\s+/)[1]
     create_driver(fluentd_conf).instance.send(param)
