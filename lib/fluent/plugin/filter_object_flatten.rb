@@ -1,9 +1,10 @@
 require 'fluent_plugin_filter_object_flatten/version'
 require 'object_flatten'
+require 'fluent/plugin/filter'
 
-module Fluent
+module Fluent::Plugin
   class ObjectFlattenFilter < Filter
-    Plugin.register_filter('object_flatten', self)
+    Fluent::Plugin.register_filter('object_flatten', self)
 
     config_param :separator, :string, :default => '.'
     config_param :tr,        :array,  :default => nil
@@ -14,7 +15,7 @@ module Fluent
 
       if @tr
         if @tr.length != 2
-          raise ConfigError, "tr: wrong length (#{@tr.length} for 2)"
+          raise Fluent::ConfigError, "tr: wrong length (#{@tr.length} for 2)"
         end
 
         @flatten_option[:tr] = @tr
